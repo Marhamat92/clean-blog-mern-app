@@ -31,7 +31,7 @@ function AddPostPage() {
           wrapperClassName="wrapperClassName"
           editorClassName="editorClassName"
         // onEditorStateChange={this.onEditorStateChange}
-        />
+        />;
         <Button color="secondary" variant="contained">Add Post</Button>
       </Stack>
     </div>

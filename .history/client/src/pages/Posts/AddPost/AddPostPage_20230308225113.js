@@ -1,8 +1,6 @@
 import React from 'react'
 import Slide from '../../../components/Slide/Slide'
 import { Stack, TextField, Button } from '@mui/material'
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 
 function AddPostPage() {
@@ -16,7 +14,7 @@ function AddPostPage() {
 
       >
         <TextField
-          id="outlined-basic"
+
           label="Title"
           variant="outlined"
         />
@@ -25,12 +23,10 @@ function AddPostPage() {
           label="Description"
           variant="outlined"
         />
-        <Editor
-          // editorState={editorState}
-          toolbarClassName="toolbarClassName"
-          wrapperClassName="wrapperClassName"
-          editorClassName="editorClassName"
-        // onEditorStateChange={this.onEditorStateChange}
+        <TextField
+          id="outlined-basic"
+          label="Content"
+          variant="outlined"
         />
         <Button color="secondary" variant="contained">Add Post</Button>
       </Stack>

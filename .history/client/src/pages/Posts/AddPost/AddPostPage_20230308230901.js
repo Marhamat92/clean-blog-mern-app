@@ -1,8 +1,7 @@
 import React from 'react'
 import Slide from '../../../components/Slide/Slide'
 import { Stack, TextField, Button } from '@mui/material'
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import RicosEditor from 'ricos-editor';
 
 
 function AddPostPage() {
@@ -25,13 +24,7 @@ function AddPostPage() {
           label="Description"
           variant="outlined"
         />
-        <Editor
-          // editorState={editorState}
-          toolbarClassName="toolbarClassName"
-          wrapperClassName="wrapperClassName"
-          editorClassName="editorClassName"
-        // onEditorStateChange={this.onEditorStateChange}
-        />
+        <RicosEditor placeholder={'Type here!'} />
         <Button color="secondary" variant="contained">Add Post</Button>
       </Stack>
     </div>

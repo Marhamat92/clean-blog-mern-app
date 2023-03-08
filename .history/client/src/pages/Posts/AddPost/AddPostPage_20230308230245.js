@@ -1,8 +1,10 @@
 import React from 'react'
 import Slide from '../../../components/Slide/Slide'
 import { Stack, TextField, Button } from '@mui/material'
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { RicosEditor } from 'ricos-editor';
+import { pluginImage } from 'wix-rich-content-plugin-image';
+import { RicosViewer } from 'ricos-viewer';
+import { pluginImage } from 'wix-rich-content-plugin-image/viewer';
 
 
 function AddPostPage() {
@@ -25,13 +27,13 @@ function AddPostPage() {
           label="Description"
           variant="outlined"
         />
-        <Editor
-          // editorState={editorState}
-          toolbarClassName="toolbarClassName"
-          wrapperClassName="wrapperClassName"
-          editorClassName="editorClassName"
-        // onEditorStateChange={this.onEditorStateChange}
+        <TextField
+          id="outlined-basic"
+          label="Content"
+          variant="outlined"
         />
+        <RicosEditor plugins={[pluginImage(ImageConfig)]} />
+        <RicosViewer plugins={[pluginImage(ImageConfig)]} />
         <Button color="secondary" variant="contained">Add Post</Button>
       </Stack>
     </div>
