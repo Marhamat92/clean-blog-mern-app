@@ -53,7 +53,7 @@ router.post('/login', async (req, res) => {
 })
 
 
-//create isAuth router middleware to check if user is logged in and add name beside email
+//create isAuth router middleware to check if user is logged in
 router.get('/auth', (req, res) => {
   if (req.session.user) {
     return res.json(req.session.user)
@@ -62,7 +62,15 @@ router.get('/auth', (req, res) => {
   }
 })
 
-
+//get user details route
+router.get('/user', async (req, res) => {
+  const user = await User.findOne({ email: req.session.user })
+  if (user) {
+    return res.status(200).json(user)
+  } else {
+    return res.status(400).json({ msg: 'No user found' })
+  }
+})
 
 
 //!logout route

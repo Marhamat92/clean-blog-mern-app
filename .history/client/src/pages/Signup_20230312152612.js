@@ -34,7 +34,6 @@ function Signup() {
 
   const navigate = useNavigate()
   const [values, setValues] = useState({
-    name: '',
     email: '',
     password: '',
     repeatPassword: '',
@@ -44,7 +43,6 @@ function Signup() {
 
 
   const [errors, setErrors] = useState({
-    name: false,
     email: false,
     password: false,
     repeatPassword: false,
@@ -57,11 +55,6 @@ function Signup() {
   const handleChange = (fieldName) => (event) => {
     const currValue = event.target.value
     switch (fieldName) {
-      case 'name':
-        currValue.length > 0
-          ? setErrors({ ...errors, name: false })
-          : setErrors({ ...errors, name: true })
-        break
       case 'email':
         validator.isEmail(currValue)
           ? setErrors({ ...errors, email: false })
@@ -102,7 +95,6 @@ function Signup() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: values.name,
           email: values.email,
           password: values.password,
         }),
@@ -127,7 +119,6 @@ function Signup() {
         fetchErrorMsg: data.msg,
       })
       setValues({
-        name: '',
         email: '',
         password: '',
         repeatPassword: '',
@@ -184,10 +175,10 @@ function Signup() {
               variant='filled'
               type='text'
               label='Name'
-              value={values.name}
-              onChange={handleChange('name')}
-              error={errors.name}
-              helperText={errors.name && 'Please insert a valid name'}
+              value={values.email}
+              onChange={handleChange('email')}
+              error={errors.email}
+              helperText={errors.email && 'Please insert a valid email address'}
             />
             <TextField
               variant='filled'

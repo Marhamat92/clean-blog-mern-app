@@ -15,6 +15,7 @@ function App() {
   useEffect(() => {
     axios.get('/api/auth')
       .then(res => {
+
         setUserSession(res.data)
         setLoading(false)
       })

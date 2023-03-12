@@ -12,7 +12,8 @@ import { UserContext } from '../../../App'
 
 function AddPostPage() {
 
-  const userContext = useContext(UserContext);
+  const [user, setUser] = useState({})
+  console.log(user, 'user from add post page')
 
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -56,6 +57,13 @@ function AddPostPage() {
       }
       )
   }
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/user')
+      .then(res => { setUser(res.data); console.log(res.data, 'res.data from add post page') })
+      .catch(err => console.log(err))
+  }, [user])
+
 
 
 

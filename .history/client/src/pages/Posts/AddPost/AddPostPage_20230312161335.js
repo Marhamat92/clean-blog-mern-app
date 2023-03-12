@@ -20,6 +20,7 @@ function AddPostPage() {
   const [post, setPost] = useState({
     post_title: '',
     post_subtitle: '',
+
   })
 
   const [editorState, setEditorState] = useState({

@@ -53,7 +53,7 @@ router.post('/login', async (req, res) => {
 })
 
 
-//create isAuth router middleware to check if user is logged in and add name beside email
+//create isAuth router middleware to check if user is logged in
 router.get('/auth', (req, res) => {
   if (req.session.user) {
     return res.json(req.session.user)
@@ -61,8 +61,6 @@ router.get('/auth', (req, res) => {
     return res.status(401).json('No user logged in')
   }
 })
-
-
 
 
 //!logout route

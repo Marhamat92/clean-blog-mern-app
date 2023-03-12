@@ -43,7 +43,7 @@ router.post('/login', async (req, res) => {
 
   const matchedPassword = await bcrypt.compare(password, user.password)
   if (matchedPassword) {
-    const userSession = { email: user.email } //creating user session to keep user loggedin also on refresh
+    const userSession = { email: user.email, name: user.name } //creating user session to keep user loggedin also on refresh
 
     req.session.user = userSession; //attach user session to session object from express-session
     return res.status(200).json({ msg: 'User logged in successfully', userSession })

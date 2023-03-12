@@ -30,6 +30,7 @@ app.use(session({
 
 
 const loginRouter = require('./routes/api/loginRouter');
+const postRouter = require('./routes/api/postRouter')
 
 
 const corsOptions = {
@@ -43,6 +44,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ extended: false }));
 app.use('/api', loginRouter);
+app.use('/post', postRouter);
+
+
 
 
 

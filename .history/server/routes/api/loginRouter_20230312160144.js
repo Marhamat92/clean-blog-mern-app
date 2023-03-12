@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
     const userSession = { email: user.email } //creating user session to keep user loggedin also on refresh
 
     req.session.user = userSession; //attach user session to session object from express-session
-    return res.status(200).json({ msg: 'User logged in successfully', userSession })
+    return res.status(200).json({ msg: 'User logged in successfully', userSession, user })
   } else {
     return res.status(400).json({ msg: 'Incorrect password' })
   };
@@ -56,7 +56,7 @@ router.post('/login', async (req, res) => {
 //create isAuth router middleware to check if user is logged in and add name beside email
 router.get('/auth', (req, res) => {
   if (req.session.user) {
-    return res.json(req.session.user)
+    return res.json(req.session.user, req.session.user.name)
   } else {
     return res.status(401).json('No user logged in')
   }

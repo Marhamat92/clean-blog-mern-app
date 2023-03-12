@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Slide from '../../../components/Slide/Slide'
 import { Stack, TextField, Button } from '@mui/material'
 import { EditorState, convertToRaw } from 'draft-js';
@@ -12,7 +12,8 @@ import { UserContext } from '../../../App'
 
 function AddPostPage() {
 
-  const userContext = useContext(UserContext);
+  const user = useContext(UserContext)
+  console.log(user, 'user from add post page')
 
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,10 +32,13 @@ function AddPostPage() {
     e.preventDefault()
     //submit html and image to server
     const html = convertToRaw(editorState.post_content.getCurrentContent())
+
+
     const dataToSubmit = {
       post_title: post.post_title,
       post_subtitle: post.post_subtitle,
       post_content: html,
+      postedBy: user.email
     }
     //create with current user
     axios.post('http://localhost:5000/post/create', dataToSubmit)
@@ -56,8 +60,6 @@ function AddPostPage() {
       }
       )
   }
-
-
 
 
 

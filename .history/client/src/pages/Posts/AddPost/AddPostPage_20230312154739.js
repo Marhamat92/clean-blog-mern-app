@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Slide from '../../../components/Slide/Slide'
 import { Stack, TextField, Button } from '@mui/material'
 import { EditorState, convertToRaw } from 'draft-js';
@@ -12,7 +12,7 @@ import { UserContext } from '../../../App'
 
 function AddPostPage() {
 
-  const userContext = useContext(UserContext);
+  const [user, setUser] = useState()
 
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -57,7 +57,9 @@ function AddPostPage() {
       )
   }
 
-
+  axios.get('http://localhost:5000/api/user')
+    .then(res => { setUser(res.data) })
+    .catch(err => console.log(err))
 
 
 

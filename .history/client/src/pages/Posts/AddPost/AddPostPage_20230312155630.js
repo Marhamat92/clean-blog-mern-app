@@ -13,7 +13,7 @@ import { UserContext } from '../../../App'
 function AddPostPage() {
 
   const userContext = useContext(UserContext);
-
+  console.log(userContext, 'userContext from addpage');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
