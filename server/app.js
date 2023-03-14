@@ -29,8 +29,9 @@ app.use(session({
 }))
 
 
-const loginRouter = require('./routes/api/loginRouter');
-const postRouter = require('./routes/api/postRouter')
+const loginRouter = require('./routes/api/loginRouter', { mergeParams: true });
+//pass session to postRouter
+const postRouter = require('./routes/api/postRouter', { mergeParams: true }, { session: session })
 
 
 const corsOptions = {

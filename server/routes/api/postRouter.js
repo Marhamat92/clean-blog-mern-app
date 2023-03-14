@@ -1,67 +1,47 @@
 const express = require('express');
 const router = express.Router();
+const session = require('express-session');
 
 
 //post model
 const Post = require('../../models/Post');
-
-router.get('/test', (req, res) => {
-  res.send('Post router testing')
-})
+const User = require('../../models/User');
 
 
 
-
-
-//create post with connected user
-router.post('/create', async (req, res) => {
-  console.log(req.body, 'before new post')
+//get session user id and create post with that id then push post id to user posts array
+router.post('/create', (req, res) => {
   const newPost = new Post({
-    userId: req.body.userId,
+    userId: req.session.user._id,
     post_title: req.body.post_title,
     post_subtitle: req.body.post_subtitle,
-    post_content: req.body.post_content,
+    post_content: req.body.post_content
   })
-  console.log(newPost, 'new post');
-  try {
-    const post = await newPost.save()
-    res.json(post)
-  } catch (err) {
-    res.status(400).json({ msg: err.message })
-  }
+  newPost.save()
+    .then(post => {
+      User.findById(req.session.user._id)
+        .then(user => {
+          user.posts.push(post._id)
+          user.save()
+            .then(user => res.json({ msg: 'Post created successfully' }))
+            .catch(err => res.status(404).json({ msg: 'Couldnt save post to user' }))
+        })
+        .catch(err => res.status(404).json({ msg: 'Couldnt find user' }))
+    })
+    .catch(err => res.status(404).json({ msg: 'Couldnt create post' }))
 })
 
 
 
-//get all posts with user id
-router.get('/list', async (req, res) => {
-  try {
-    let feed = [];
 
-    const currentUser = await getPostUser(req.body.userId)
-    if (!currentUser)
-      return res.status(404).json({ error: 'User not found' });
 
-    // my posts
-    if (currentUser) {
-      const userPosts = await Post
-        .find({ userId: currentUser._id }).sort({ createdAt: -1 })
-        .populate('userId', '_id username firstname lastname email avatar bio followers followings')
-    }
-    // friends posts
-    const userFollowings = currentUser.followings;
-    if (userFollowings.length > 0) {
-      const friendPosts = await Post.find({ userId: { $in: userFollowings } }).sort({ createdAt: -1 });
-      feed = userPosts.concat(friendPosts);
-    } else {
-      feed = userPosts;
-    }
-    res.status(200).json(feed);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
 
+//get all posts
+router.get('/list', (req, res) => {
+  Post.find()
+    .then(posts => res.json(posts))
+    .catch(err => res.status(404).json({ nopostfound: 'Couldnt find any book' }))
+})
 
 
 router.get('/:id', (req, res) => {

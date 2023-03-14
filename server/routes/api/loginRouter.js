@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const User = require('../../models/User')
+const session = require('express-session')
 
 //!register route
 router.post('/register', async (req, res) => {
@@ -61,6 +62,7 @@ router.get('/auth', (req, res) => {
     return res.status(401).json('No user logged in')
   }
 })
+
 
 
 
