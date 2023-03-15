@@ -20,6 +20,7 @@ function AddPostPage() {
   const [post, setPost] = useState({
     post_title: '',
     post_subtitle: '',
+
   })
 
   const [editorState, setEditorState] = useState({
@@ -35,6 +36,7 @@ function AddPostPage() {
       post_title: post.post_title,
       post_subtitle: post.post_subtitle,
       post_content: html,
+
     }
     //create with current user
     axios.post('http://localhost:5000/post/create', dataToSubmit)
@@ -56,15 +58,6 @@ function AddPostPage() {
       }
       )
   }
-
-
-
-
-
-
-
-
-
 
 
 

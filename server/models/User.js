@@ -3,28 +3,30 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: [
+      true, 'please add a name'
+    ]
   },
   email: {
     type: String,
-    required: true,
+    required: [
+      true,
+      'please add an email'
+    ],
     unique: true
   },
   password: {
     type: String,
-    required: true
-  },
-  date: {
-    type: Date,
-    default: Date.now
-  },
-  posts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'post'
-    }
-  ]
-})
+    required: [
+      true,
+      'please add a password'
+    ]
+  }
+},
+  {
+    timestamps: true
+  }
+)
 
 
 module.exports = User = mongoose.model('user', UserSchema);

@@ -12,13 +12,15 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [userSession, setUserSession] = useState({})
 
+  //get token from backend and set userSession
   useEffect(() => {
-    axios.get('/api/auth')
-      .then(res => {
+    axios
+      .get('http://localhost:5000/api/token')
+      .then((res) => {
         setUserSession(res.data)
         setLoading(false)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err)
         setLoading(false)
       })

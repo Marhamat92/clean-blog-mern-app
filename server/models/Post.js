@@ -1,29 +1,35 @@
 const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
-  userId: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user'
-    }
-  ],
+  author:
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true
+  }
+  ,
   post_title: {
     type: String,
-    required: true
+    required: [
+      true, 'Please add Post Title'
+    ]
   },
   post_subtitle: {
     type: String,
-    required: true
+    required: [
+      true, 'Please add Post Subtitle'
+    ]
   },
   //poste_content will be rich text editor
   post_content: {
     type: Object,
-    required: true
-  },
-  date: {
-    type: Date,
-    default: Date.now
+    required: [
+      true, 'Please add Post Content'
+    ]
   }
+
+}, {
+  timestamps: true,
 })
 
 module.exports = Post = mongoose.model('post', PostSchema);
