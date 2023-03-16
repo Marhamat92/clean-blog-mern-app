@@ -10,6 +10,7 @@ const User = require('../models/User')
 const getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({ author: req.user.id })
   res.json(posts)
+
 })
 
 
@@ -36,38 +37,32 @@ const createPost = asyncHandler(async (req, res) => {
 //@ desc update a post 
 //@route PUT /post/:id
 //@access Private
-//only user who created the post can update it
-const updatePost = asyncHandler(
-  async (req, res) => {
-    const post = await Post.findById(req.params.id)
+const updatePost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id)
 
-    if (!post) {
-      res.status(400)
-      throw new Error('post not found')
-    }
+  if (!post) {
+    res.status(400)
+    throw new Error('Post not found')
+  }
 
-    //check for user
-    if (!req.user) {
-      res.status(401)
-      throw new Error('User not found')
-    }
+  // Check for user
+  if (!req.user) {
+    res.status(401)
+    throw new Error('User not found')
+  }
 
-    //make sure logged user matches post user
-    if (post.author.toString() !== req.user.id) {
-      res.status(401)
-      throw new Error('user not authorized')
-    }
+  //make sure the logged in user matches the post user
+  if (
+    post.user.toString() !== req.user.id) {
+    res.status(401)
+    throw new Error('user not authorized')
+  }
 
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    })
-    res.status(200).json(updatedPost)
+  const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
   })
-
-
-
-
+  res.status(200).json(updatedPost)
+})
 
 
 //@ desc delete a post
@@ -90,7 +85,7 @@ const deletePost = asyncHandler(async (req, res) => {
   }
 
   //make sure the logged in user matches the post user
-  if (post.author.toString() !== req.user.id) {
+  if (post.user.string !== req.user.id) {
     res.status(401)
     throw new Error('user not authorized')
   }
@@ -108,22 +103,6 @@ const deletePost = asyncHandler(async (req, res) => {
 //@access Private
 const getPost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id)
-
-  const user = await User.findById(req.user.id)
-
-  //check for user
-  if (!user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
-
-  //make sure the logged in user matches the post user
-  if (post.author.toString() !== req.user.id) {
-    res.status(401)
-    throw new Error('user not authorized')
-  }
-
-
   if (post) {
     res.json(post)
   }

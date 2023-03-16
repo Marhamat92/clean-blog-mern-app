@@ -10,6 +10,7 @@ const User = require('../models/User')
 const getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({ author: req.user.id })
   res.json(posts)
+
 })
 
 
@@ -53,7 +54,7 @@ const updatePost = asyncHandler(
     }
 
     //make sure logged user matches post user
-    if (post.author.toString() !== req.user.id) {
+    if (post.user.toString() !== req.user.id) {
       res.status(401)
       throw new Error('user not authorized')
     }
@@ -90,7 +91,7 @@ const deletePost = asyncHandler(async (req, res) => {
   }
 
   //make sure the logged in user matches the post user
-  if (post.author.toString() !== req.user.id) {
+  if (post.user.string !== req.user.id) {
     res.status(401)
     throw new Error('user not authorized')
   }
@@ -108,22 +109,6 @@ const deletePost = asyncHandler(async (req, res) => {
 //@access Private
 const getPost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id)
-
-  const user = await User.findById(req.user.id)
-
-  //check for user
-  if (!user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
-
-  //make sure the logged in user matches the post user
-  if (post.author.toString() !== req.user.id) {
-    res.status(401)
-    throw new Error('user not authorized')
-  }
-
-
   if (post) {
     res.json(post)
   }
