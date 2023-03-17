@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import validator from 'validator'
 import { regexPassword } from '../utils'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { login, reset } from '../features/auth/authSlice'
 
 import {
   Paper,
@@ -31,6 +34,15 @@ import theme from '../styles/theme'
 
 function Login({ }) {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth)
+
+
+
+
+
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -64,57 +76,30 @@ function Login({ }) {
     })
   }
 
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess || user) {
+      navigate('/')
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
+
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    try {
-      const res = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: values.email,
-          password: values.password,
-        }),
-      })
-
-      if (!res.ok) {
-        const error = await res.json()
-        return setErrors({
-          ...errors,
-          fetchError: true,
-          fetchErrorMsg: error.msg,
-        })
-      }
-
-      const data = await res.json()
-
-
-
-      // this is just a visual feedback for user for this demo
-      // this will not be an error, rather we will show a different UI or redirect user to dashboard
-      setErrors({
-        ...errors,
-        fetchError: true,
-        fetchErrorMsg: data.msg,
-      })
-      setValues({
-        email: '',
-        password: '',
-        showPassword: false,
-      })
-      navigate('/')
-      window.location.reload()
-      return
-    } catch (error) {
-      setErrors({
-        ...errors,
-        fetchError: true,
-        fetchErrorMsg:
-          'There was a problem with our server, please try again later',
-      })
+    const userData = {
+      email: values.email,
+      password: values.password,
     }
+
+    dispatch(login(userData))
+
   }
 
   return (

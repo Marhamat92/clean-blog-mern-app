@@ -17,7 +17,8 @@ import './appBar.scss'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserContext } from '../../App';
+import { useSelector, useDispatch } from 'react-redux';
+import { reset, logout } from "../../features/auth/authSlice"
 
 const pages = ['Home', 'About', 'Add New Post'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -25,7 +26,10 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ApplicationBar() {
   const navigate = useNavigate();
-  const userContext = useContext(UserContext);
+  const { user } = useSelector(
+    (state => state.auth)
+  )
+  const dispatch = useDispatch()
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -46,17 +50,9 @@ function ApplicationBar() {
   };
 
   const logOut = async () => {
-    await axios.get('/api/logout')
-      .then(res => {
-        if (res.data) {
-          navigate('/')
-          //load the page again
-          window.location.reload()
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    dispatch(logout())
+    dispatch(reset())
+    navigate('/')
   }
 
   //make navbar #7986cb when scroll down and make it transparent when scroll up
@@ -89,7 +85,7 @@ function ApplicationBar() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -134,7 +130,7 @@ function ApplicationBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.toLowerCase()} onClick={handleCloseNavMenu}>
-                  <Link className='mainLink' to={page === "Home" ? "/" : page === "About" ? "about" : page === "Add New Post" && "newPost"}>
+                  <Link className='mainLink' to={page === "Home" ? "/home" : page === "About" ? "about" : page === "Add New Post" && "newPost"}>
                     <Typography textAlign="center">{page}</Typography>
                   </Link>
                 </MenuItem>
@@ -146,7 +142,7 @@ function ApplicationBar() {
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -167,7 +163,7 @@ function ApplicationBar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                <Link className='mainLink' to={page === "Home" ? "/" : page === "About" ? "about" : page === "Add New Post" && "newPost"}>
+                <Link className='mainLink' to={page === "Home" ? "/home" : page === "About" ? "about" : page === "Add New Post" && "newPost"}>
                   {page}
                 </Link>
 
@@ -178,7 +174,7 @@ function ApplicationBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={userContext.email && userContext.email.toUpperCase()} src="/static/images/avatar/2.jpg" />
+                <Avatar alt={user.name && user.name.toUpperCase()} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

@@ -1,43 +1,27 @@
-import { useState, useEffect, createContext } from 'react'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './styles/theme'
 import RoutesComp from './Routers'
 import axios from 'axios'
 import Layout from './components/Layout/Layout'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-export const UserContext = createContext({})
+
 
 function App() {
-  const [loading, setLoading] = useState(true)
-  const [userSession, setUserSession] = useState({})
-
-  //get token from backend and set userSession
-  useEffect(() => {
-    axios
-      .get('http://localhost:5000/api/token')
-      .then((res) => {
-        setUserSession(res.data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        console.log(err)
-        setLoading(false)
-      })
-  }, [])
-
-
 
 
   return (
-    <UserContext.Provider value={userSession}>
+    <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout>
-          {loading ? <>loading...</> : <RoutesComp />}
+          <RoutesComp />
         </Layout>
       </ThemeProvider>
-    </UserContext.Provider>
+      <ToastContainer />
+    </>
   )
 }
 

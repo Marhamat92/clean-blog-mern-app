@@ -3,6 +3,7 @@ import ApplicationBar from '../Navbar/AppBar'
 import Footer from '../Footer/Footer'
 import { useContext } from 'react'
 import { UserContext } from '../../App'
+import { useSelector } from 'react-redux'
 
 
 function Layout(
@@ -11,13 +12,19 @@ function Layout(
   }
 ) {
 
-  const userContext = useContext(UserContext)
+  const { user } = useSelector(
+    (state => state.auth)
+  )
+
+
+
+
 
   return (
     <>
-      {userContext.email && <ApplicationBar />}
+      {user && <ApplicationBar />}
       {children}
-      {userContext.email && <Footer />}
+      {user && <Footer />}
     </>
   )
 }

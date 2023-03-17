@@ -9,14 +9,21 @@ import Slide from '../../components/Slide/Slide';
 import PostList from '../../components/Posts/PostList/PostList';
 import './homePage.scss'
 import slideImage from '../../images/home-bg.jpg'
+import { useSelector } from 'react-redux'
+
 
 function HomePage() {
-  const userContext = useContext(UserContext);
+
+  const { user } = useSelector(
+    (state => state.auth)
+  )
+
+  console.log(user)
 
   return (
     <>
       <div className='homePage'>
-        <Slide title="Clean Blog" subtitle={`A Blog Theme by ${userContext.email}`} image={slideImage} />
+        <Slide title="Clean Blog" subtitle={`A Blog Theme by ${user.name}`} image={slideImage} />
         <PostList />
       </div>
     </>

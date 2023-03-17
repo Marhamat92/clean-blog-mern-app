@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import validator from 'validator'
 import { regexPassword } from '../utils'
@@ -27,12 +27,23 @@ import {
 } from '@mui/icons-material'
 import theme from '../styles/theme'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { register, reset } from '../features/auth/authSlice'
 
 
 
 function Signup() {
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth)
+
+
+
+
   const [values, setValues] = useState({
     name: '',
     email: '',
@@ -90,64 +101,40 @@ function Signup() {
     })
   }
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess || user) {
+      navigate('/')
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
 
   //submit 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-        }),
-      })
-
-      if (!res.ok) {
-        const error = await res.json()
-        return setErrors({
-          ...errors,
-          fetchError: true,
-          fetchErrorMsg: error.msg,
-        })
+    if (values.password !== values.repeatPassword) {
+      toast.error('Passwords do not match')
+    } else {
+      const userData = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
       }
 
-      const data = await res.json()
-      // this is just a visual feedback for user for this demo
-      // this will not be an error, rather we will show a different UI or redirect user to dashboard
-      // ideally we also want a way to confirm their email or identity
-      setErrors({
-        ...errors,
-        fetchError: true,
-        fetchErrorMsg: data.msg,
-      })
-      setValues({
-        name: '',
-        email: '',
-        password: '',
-        repeatPassword: '',
-        showPassword: false,
-        showRepeatPassword: false,
-      })
+      dispatch(register(userData))
+      navigate('/home')
 
-      // redirect user to login
-      navigate('/')
-
-
-      return
-    } catch (error) {
-      setErrors({
-        ...errors,
-        fetchError: true,
-        fetchErrorMsg:
-          'There was a problem with our server, please try again later',
-      })
     }
+  }
+
+  if (isLoading) {
+    return <div>Loading....</div>
   }
 
   return (

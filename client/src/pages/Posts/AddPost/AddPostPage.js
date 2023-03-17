@@ -6,13 +6,14 @@ import { Editor } from 'react-draft-wysiwyg';
 import axios from 'axios';
 import htmlToDraft from 'html-to-draftjs';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useContext } from 'react'
-import { UserContext } from '../../../App'
+import { useSelector } from 'react-redux';
 
 
 function AddPostPage() {
 
-  const userContext = useContext(UserContext);
+  const { user } = useSelector(
+    (state => state.auth)
+  )
 
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
