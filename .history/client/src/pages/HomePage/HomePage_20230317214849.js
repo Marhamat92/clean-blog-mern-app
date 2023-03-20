@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { UserContext } from '../../App'
 import { Button } from '@mui/material';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '../../components/Navbar/AppBar';
 import Slide from '../../components/Slide/Slide';
 import PostList from '../../components/Posts/PostList/PostList';
@@ -14,22 +14,16 @@ import { useSelector } from 'react-redux'
 
 function HomePage() {
 
-  const navigate = useNavigate()
-
   const { user } = useSelector(
     (state => state.auth)
   )
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/login')
-    }
-  }, [user, navigate])
+  console.log(user)
 
   return (
     <>
       <div className='homePage'>
-        <Slide title="Clean Blog" subtitle={`A Blog Theme by ${user?.name}`} image={slideImage} />
+        <Slide title="Clean Blog" subtitle={`A Blog Theme by ${user.name}`} image={slideImage} />
         <PostList />
       </div>
     </>

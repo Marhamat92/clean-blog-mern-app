@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import validator from 'validator'
 import { regexPassword } from '../utils'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { login, reset } from '../features/auth/authSlice'
+
 import {
   Paper,
   Container,
@@ -26,16 +31,8 @@ import {
   VisibilityOff,
 } from '@mui/icons-material'
 import theme from '../styles/theme'
-import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { toast } from 'react-toastify'
-import { register, reset } from '../features/auth/authSlice'
-import CircularProgress from '@mui/material/CircularProgress';
 
-
-
-function Signup() {
-
+function Login({ }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -45,62 +42,40 @@ function Signup() {
 
 
 
+
   const [values, setValues] = useState({
-    name: '',
     email: '',
     password: '',
-    repeatPassword: '',
     showPassword: false,
-    showRepeatPassword: false,
   })
-
-
   const [errors, setErrors] = useState({
-    name: false,
     email: false,
     password: false,
-    repeatPassword: false,
     fetchError: false,
     fetchErrorMsg: '',
   })
 
-
-  //handle value changes
   const handleChange = (fieldName) => (event) => {
     const currValue = event.target.value
-    switch (fieldName) {
-      case 'name':
-        currValue.length > 0
-          ? setErrors({ ...errors, name: false })
-          : setErrors({ ...errors, name: true })
-        break
-      case 'email':
-        validator.isEmail(currValue)
-          ? setErrors({ ...errors, email: false })
-          : setErrors({ ...errors, email: true })
-        break
+    let isCorrectValue =
+      fieldName === 'email'
+        ? validator.isEmail(currValue)
+        : regexPassword.test(currValue)
 
-      case 'password':
-        regexPassword.test(currValue)
-          ? setErrors({ ...errors, password: false })
-          : setErrors({ ...errors, password: true })
-        break
+    isCorrectValue
+      ? setErrors({ ...errors, [fieldName]: false })
+      : setErrors({ ...errors, [fieldName]: true })
 
-      case 'repeatPassword':
-        currValue === values.password
-          ? setErrors({ ...errors, repeatPassword: false })
-          : setErrors({ ...errors, repeatPassword: true })
-        break
-    }
     setValues({ ...values, [fieldName]: event.target.value })
   }
 
-  const handleShowPassword = (showPasswordField) => {
+  const handleShowPassword = () => {
     setValues({
       ...values,
-      [showPasswordField]: !values[showPasswordField],
+      showPassword: !values.showPassword,
     })
   }
+
 
   useEffect(() => {
     if (isError) {
@@ -108,41 +83,28 @@ function Signup() {
     }
 
     if (isSuccess || user) {
-      navigate('/')
+      navigate('/home')
     }
 
     dispatch(reset())
   }, [user, isError, isSuccess, message, navigate, dispatch])
 
 
-  //submit 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
-    if (values.password !== values.repeatPassword) {
-      toast.error('Passwords do not match')
-    } else {
-      const userData = {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      }
-
-      dispatch(register(userData))
-
-
+    const userData = {
+      email: values.email,
+      password: values.password,
     }
-  }
 
-  if (isLoading) {
-    return <Box sx={{ display: 'flex' }}>
-      <CircularProgress />
-    </Box>
+    dispatch(login(userData))
+    navigate('/home')
   }
 
   return (
     <>
-      <Container sx={{ marginTop: 'calc(100vh - 45%)' }} maxWidth='sm'>
+      <Container sx={{ marginTop: 'calc(100vh - 40%)' }} maxWidth='xs'>
         <Paper elevation={6}>
           <Container
             maxWidth='sm'
@@ -162,7 +124,7 @@ function Signup() {
               }}>
               <FaceIcon sx={{ fontSize: 70 }} />
             </Avatar>
-            <h2>Register a new account</h2>
+            <h2>Login</h2>
           </Container>
           <Stack
             component='form'
@@ -170,15 +132,6 @@ function Signup() {
             noValidate
             spacing={6}
             sx={{ bgcolor: '#f5f5f6', padding: '40px' }}>
-            <TextField
-              variant='filled'
-              type='text'
-              label='Name'
-              value={values.name}
-              onChange={handleChange('name')}
-              error={errors.name}
-              helperText={errors.name && 'Please insert a valid name'}
-            />
             <TextField
               variant='filled'
               type='email'
@@ -201,49 +154,13 @@ function Signup() {
                   <InputAdornment position='end'>
                     <IconButton
                       aria-label='toggle password visibility'
-                      onClick={() => handleShowPassword('showPassword')}
+                      onClick={handleShowPassword}
                       edge='end'>
                       {values.showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 }
               />
-
-              <FormHelperText error={errors.password}>
-                Password must be at least 8 characters, have one symbol, 1
-                uppercase letter, 1 lowercase and 1 digit
-              </FormHelperText>
-            </FormControl>
-
-            <FormControl variant='filled'>
-              <InputLabel htmlFor='password-repeat-field'>
-                Repeat password
-              </InputLabel>
-              <FilledInput
-                id='password-repeat-field'
-                type={values.showRepeatPassword ? 'text' : 'password'}
-                value={values.repeatPassword}
-                onChange={handleChange('repeatPassword')}
-                endAdornment={
-                  <InputAdornment position='end'>
-                    <IconButton
-                      aria-label='toggle password visibility'
-                      onClick={() => handleShowPassword('showRepeatPassword')}
-                      edge='end'>
-                      {values.showRepeatPassword ? (
-                        <VisibilityOff />
-                      ) : (
-                        <Visibility />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-              {errors.repeatPassword && (
-                <FormHelperText error={errors.repeatPassword}>
-                  Password must be the same as above
-                </FormHelperText>
-              )}
             </FormControl>
             <Box
               sx={{
@@ -254,10 +171,11 @@ function Signup() {
                 variant='contained'
                 size='large'
                 type='submit'
+                disabled={errors.email || errors.password}
                 sx={{
                   minWidth: '70%',
                 }}>
-                Sign me up!
+                Login
               </Button>
             </Box>
             {errors.fetchError && (
@@ -265,9 +183,9 @@ function Signup() {
             )}
             <Divider />
             <Typography paragraph align='center'>
-              Already have an account?{' '}
-              <Link component={RouterLink} to='/'>
-                Login here
+              Don't have an account yet?{' '}
+              <Link component={RouterLink} to='/signup'>
+                Sign up here
               </Link>
             </Typography>
           </Stack>
@@ -277,4 +195,4 @@ function Signup() {
   )
 }
 
-export default Signup
+export default Login

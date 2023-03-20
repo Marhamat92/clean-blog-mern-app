@@ -29,7 +29,7 @@ function HomePage() {
   return (
     <>
       <div className='homePage'>
-        <Slide title="Clean Blog" subtitle={`A Blog Theme by ${user?.name}`} image={slideImage} />
+        <Slide title="Clean Blog" subtitle={`A Blog Theme by ${user.name}`} image={slideImage} />
         <PostList />
       </div>
     </>

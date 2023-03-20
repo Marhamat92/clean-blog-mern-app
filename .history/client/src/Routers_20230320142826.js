@@ -27,7 +27,7 @@ function RoutesComp() {
         <Route path='*' element={<h1>Page couldn't found!</h1>} />
 
         <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
+        <Route path='/register' element={<Signup />} />
 
 
 

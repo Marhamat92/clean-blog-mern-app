@@ -30,7 +30,6 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { register, reset } from '../features/auth/authSlice'
-import CircularProgress from '@mui/material/CircularProgress';
 
 
 
@@ -116,7 +115,7 @@ function Signup() {
 
 
   //submit 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     if (values.password !== values.repeatPassword) {
@@ -129,15 +128,13 @@ function Signup() {
       }
 
       dispatch(register(userData))
-
+      navigate('/home')
 
     }
   }
 
   if (isLoading) {
-    return <Box sx={{ display: 'flex' }}>
-      <CircularProgress />
-    </Box>
+    return <div>Loading....</div>
   }
 
   return (

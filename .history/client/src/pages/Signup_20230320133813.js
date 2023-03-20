@@ -116,7 +116,7 @@ function Signup() {
 
 
   //submit 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     if (values.password !== values.repeatPassword) {

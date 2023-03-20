@@ -52,7 +52,7 @@ function ApplicationBar() {
   const logOut = async () => {
     dispatch(logout())
     dispatch(reset())
-    navigate('/login')
+    navigate('/')
   }
 
   //make navbar #7986cb when scroll down and make it transparent when scroll up
@@ -85,7 +85,7 @@ function ApplicationBar() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -130,7 +130,7 @@ function ApplicationBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.toLowerCase()} onClick={handleCloseNavMenu}>
-                  <Link className='mainLink' to={page === "Home" ? "/" : page === "About" ? "about" : page === "Add New Post" && "newPost"}>
+                  <Link className='mainLink' to={page === "Home" ? "/home" : page === "About" ? "about" : page === "Add New Post" && "newPost"}>
                     <Typography textAlign="center">{page}</Typography>
                   </Link>
                 </MenuItem>
@@ -142,7 +142,7 @@ function ApplicationBar() {
             variant="h5"
             noWrap
             component="a"
-            href="/"
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -163,7 +163,7 @@ function ApplicationBar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                <Link className='mainLink' to={page === "Home" ? "/" : page === "About" ? "about" : page === "Add New Post" && "newPost"}>
+                <Link className='mainLink' to={page === "Home" ? "/home" : page === "About" ? "about" : page === "Add New Post" && "newPost"}>
                   {page}
                 </Link>
 

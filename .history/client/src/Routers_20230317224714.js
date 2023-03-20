@@ -20,16 +20,20 @@ function RoutesComp() {
     <>
 
       <Routes>
+        {user ?
+          <>
+            <Route path='/home' element={<HomePage />} />
+            <Route path='/about' element={<AboutPage />} />
+            <Route path='/newPost' element={<AddPostPage />} />
+            <Route path='*' element={<h1>Page couldn't found!</h1>} />
+          </>
+          :
 
-        <Route path='/' element={<HomePage />} />
-        <Route path='/about' element={<AboutPage />} />
-        <Route path='/newPost' element={<AddPostPage />} />
-        <Route path='*' element={<h1>Page couldn't found!</h1>} />
-
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-
-
+          <>
+            <Route path='/' element={<Login />} />
+            <Route path='/signup' element={<Signup />} />
+          </>
+        }
 
 
       </Routes>

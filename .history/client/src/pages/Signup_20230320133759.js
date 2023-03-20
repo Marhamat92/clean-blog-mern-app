@@ -31,7 +31,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { register, reset } from '../features/auth/authSlice'
 import CircularProgress from '@mui/material/CircularProgress';
-
+import Box from '@mui/material/Box';
 
 
 function Signup() {
@@ -116,7 +116,7 @@ function Signup() {
 
 
   //submit 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     if (values.password !== values.repeatPassword) {
