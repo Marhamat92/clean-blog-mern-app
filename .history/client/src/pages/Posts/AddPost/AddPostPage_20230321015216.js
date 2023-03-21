@@ -44,27 +44,31 @@ function AddPostPage() {
   const handlePostSubmit = (e) => {
     e.preventDefault()
     //submit html and image to server
-    const html = convertToRaw(editorState.post_content.getCurrentContent())
-    const postData = {
-      post_title: post.post_title,
-      post_subtitle: post.post_subtitle,
-      post_content: html,
 
+
+    if (!postData) {
+      toast.error('Please fill all!')
+    } else {
+      const html = convertToRaw(editorState.post_content.getCurrentContent())
+      const postData = {
+        post_title: post.post_title,
+        post_subtitle: post.post_subtitle,
+        post_content: html,
+
+      }
+      dispatch(createPostSlice(postData))
     }
 
-    dispatch(createPostSlice(postData))
 
-    setPost({
-      post_title: '',
-      post_subtitle: '',
-    })
-    setEditorState({
-      post_content: EditorState.createEmpty()
-    })
+
   }
 
 
-
+  if (isLoading) {
+    return <Box sx={{ display: 'flex' }}>
+      <CircularProgress />
+    </Box>
+  }
 
 
   return (

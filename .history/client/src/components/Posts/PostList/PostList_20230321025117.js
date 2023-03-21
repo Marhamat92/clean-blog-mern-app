@@ -5,13 +5,11 @@ import { Button } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { getPostsSlice, reset } from '../../../features/posts/postsSlice'
 import authService from '../../../features/auth/authService'
-import CircularProgress from '@mui/material/CircularProgress';
-import { useNavigate } from 'react-router-dom'
 
 
 
 function PostList() {
-  const navigate = useNavigate()
+
   const dispatch = useDispatch()
   const { posts, isLoading, isError, message } = useSelector(
     (state) => state.posts
@@ -22,29 +20,16 @@ function PostList() {
   )
 
   useEffect(() => {
-    if (isError) {
-      console.log(message)
-    }
-
-    if (!user) {
-      navigate('/login')
-    }
 
 
-    dispatch(getPostsSlice())
-    return () => {
-      dispatch(reset())
-    }
 
-  }, [user, isError, message, dispatch]);
+  }, [isError, message, dispatch]);
 
 
-  if (isLoading) {
-    return <CircularProgress />
-  }
+
 
   const renderedPosts = posts.map((post) => {
-    return <PostCard key={post._id} postTitle={post.post_title} postDescription={post.post_subtitle} postedBy={user.name} createdDate={post.createdAt} />
+    return <PostCard key={post._id} postTitle={post.post_title} postDescription={post.post_description} postedBy={user.name} postDate={post.createdAt} />
   })
   return (
     <div className='listContainer'>

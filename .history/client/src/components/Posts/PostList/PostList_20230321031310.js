@@ -44,7 +44,7 @@ function PostList() {
   }
 
   const renderedPosts = posts.map((post) => {
-    return <PostCard key={post._id} postTitle={post.post_title} postDescription={post.post_subtitle} postedBy={user.name} createdDate={post.createdAt} />
+    return <PostCard key={post._id} postTitle={post.post_title} postDescription={post.post_description} postedBy={user.name} createdDate={post.createdAt} />
   })
   return (
     <div className='listContainer'>

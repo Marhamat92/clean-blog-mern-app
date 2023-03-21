@@ -61,10 +61,17 @@ function AddPostPage() {
     setEditorState({
       post_content: EditorState.createEmpty()
     })
+
+
   }
 
 
 
+  if (isLoading) {
+    return <Box sx={{ display: 'flex' }}>
+      <CircularProgress />
+    </Box>
+  }
 
 
   return (

@@ -9,7 +9,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { createPostSlice, reset } from '../../../features/posts/postsSlice'
+import { createPost, reset } from '../../../features/posts/postsSlice'
 import CircularProgress from '@mui/material/CircularProgress';
 
 
@@ -52,19 +52,33 @@ function AddPostPage() {
 
     }
 
-    dispatch(createPostSlice(postData))
+    if (!postData) {
+      toast.error('Please fill all!')
+    } else {
+      dispatch(createPost(postData))
+    }
 
-    setPost({
-      post_title: '',
-      post_subtitle: '',
-    })
-    setEditorState({
-      post_content: EditorState.createEmpty()
-    })
+
+
   }
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
 
+    if (isSuccess) {
+      navigate('/')
+    }
 
+    dispatch(reset())
+  }, [posts, isError, isSuccess, message, navigate, dispatch])
+
+  if (isLoading) {
+    return <Box sx={{ display: 'flex' }}>
+      <CircularProgress />
+    </Box>
+  }
 
 
   return (

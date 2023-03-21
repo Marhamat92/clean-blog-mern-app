@@ -52,19 +52,33 @@ function AddPostPage() {
 
     }
 
-    dispatch(createPostSlice(postData))
+    if (!postData) {
+      toast.error('Please fill all!')
+    } else {
+      dispatch(createPost(postData))
+    }
 
-    setPost({
-      post_title: '',
-      post_subtitle: '',
-    })
-    setEditorState({
-      post_content: EditorState.createEmpty()
-    })
+
+
   }
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
 
+    if (isSuccess) {
+      navigate('/')
+    }
 
+    dispatch(reset())
+  }, [posts, isError, isSuccess, message, navigate, dispatch])
+
+  if (isLoading) {
+    return <Box sx={{ display: 'flex' }}>
+      <CircularProgress />
+    </Box>
+  }
 
 
   return (

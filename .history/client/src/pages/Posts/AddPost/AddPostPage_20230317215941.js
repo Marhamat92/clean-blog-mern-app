@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Slide from '../../../components/Slide/Slide'
-import { Stack, TextField, Button, Box } from '@mui/material'
+import { Stack, TextField, Button } from '@mui/material'
 import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import axios from 'axios';
 import htmlToDraft from 'html-to-draftjs';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { toast } from 'react-toastify'
-import { createPostSlice, reset } from '../../../features/posts/postsSlice'
-import CircularProgress from '@mui/material/CircularProgress';
-
+import { useSelector } from 'react-redux';
 
 
 function AddPostPage() {
@@ -20,15 +15,8 @@ function AddPostPage() {
     (state => state.auth)
   )
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-
-  const { posts, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.posts
-  )
-
-
-
+  const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [post, setPost] = useState({
     post_title: '',
@@ -45,25 +33,32 @@ function AddPostPage() {
     e.preventDefault()
     //submit html and image to server
     const html = convertToRaw(editorState.post_content.getCurrentContent())
-    const postData = {
+    const dataToSubmit = {
       post_title: post.post_title,
       post_subtitle: post.post_subtitle,
       post_content: html,
 
     }
+    //create with current user
+    axios.post('http://localhost:5000/post/create', dataToSubmit)
+      .then(res => {
 
-    dispatch(createPostSlice(postData))
+        if (res.status === 200) {
+          setMessage('Post created successfully')
+          setPost({
+            post_title: '',
+            post_subtitle: '',
 
-    setPost({
-      post_title: '',
-      post_subtitle: '',
-    })
-    setEditorState({
-      post_content: EditorState.createEmpty()
-    })
+          })
+          setEditorState({
+            post_content: EditorState.createEmpty()
+          })
+        } else {
+          setErrorMessage('Post creation failed')
+        }
+      }
+      )
   }
-
-
 
 
 
@@ -99,6 +94,8 @@ function AddPostPage() {
             (editorState) => setEditorState({ ...editorState, post_content: editorState })
           }
         />
+        <p style={{ color: 'green' }}>{message}</p>
+        <p style={{ color: 'red' }}>{errorMessage}</p>
         <Button type='submit' color="secondary" variant="contained">Add Post</Button>
       </Stack>
     </div>

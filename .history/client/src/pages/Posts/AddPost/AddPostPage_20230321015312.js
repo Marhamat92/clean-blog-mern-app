@@ -52,19 +52,22 @@ function AddPostPage() {
 
     }
 
+
+    if (!postData) toast.error('Please fill all!')
+
     dispatch(createPostSlice(postData))
 
-    setPost({
-      post_title: '',
-      post_subtitle: '',
-    })
-    setEditorState({
-      post_content: EditorState.createEmpty()
-    })
+
+
+
   }
 
 
-
+  if (isLoading) {
+    return <Box sx={{ display: 'flex' }}>
+      <CircularProgress />
+    </Box>
+  }
 
 
   return (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Slide from '../../../components/Slide/Slide'
-import { Stack, TextField, Button, Box } from '@mui/material'
+import { Stack, TextField, Button } from '@mui/material'
 import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import axios from 'axios';
@@ -9,7 +9,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { createPostSlice, reset } from '../../../features/posts/postsSlice'
+import { createPost, reset } from '../../../features/posts/postsSlice'
 import CircularProgress from '@mui/material/CircularProgress';
 
 
@@ -45,25 +45,32 @@ function AddPostPage() {
     e.preventDefault()
     //submit html and image to server
     const html = convertToRaw(editorState.post_content.getCurrentContent())
-    const postData = {
+    const dataToSubmit = {
       post_title: post.post_title,
       post_subtitle: post.post_subtitle,
       post_content: html,
 
     }
+    //create with current user
+    axios.post('http://localhost:5000/post/create', dataToSubmit)
+      .then(res => {
 
-    dispatch(createPostSlice(postData))
+        if (res.status === 200) {
 
-    setPost({
-      post_title: '',
-      post_subtitle: '',
-    })
-    setEditorState({
-      post_content: EditorState.createEmpty()
-    })
+          setPost({
+            post_title: '',
+            post_subtitle: '',
+
+          })
+          setEditorState({
+            post_content: EditorState.createEmpty()
+          })
+        } else {
+
+        }
+      }
+      )
   }
-
-
 
 
 

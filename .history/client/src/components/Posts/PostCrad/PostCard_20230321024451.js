@@ -15,7 +15,7 @@ function PostCard({
       <Typography variant="h3" className='cardSubtitle'>
         {postDescription}
       </Typography>
-      <Typography className='postedBy' variant="body1">Posted by <span>{postedBy}</span> and created date is {createdDate.slice(0, 10)}</Typography>
+      <Typography className='postedBy' variant="body1">Posted by <span>{postedBy}</span>{createdDate}</Typography>
     </Box>
   )
 }
