@@ -51,11 +51,15 @@ function ApplicationBar() {
 
   const logOut = async () => {
     dispatch(logout())
+    //reload the page
+    window.location.reload()
     dispatch(reset())
     navigate('/login')
+
   }
 
   //make navbar #7986cb when scroll down and make it transparent when scroll up
+
   window.addEventListener('scroll', () => {
     const appBar = document.getElementById('appBar');
     if (window.scrollY > 5) {
@@ -64,7 +68,6 @@ function ApplicationBar() {
       appBar.style.backgroundColor = 'transparent';
     }
   })
-
 
 
 
@@ -174,7 +177,7 @@ function ApplicationBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={user.name && user.name.toUpperCase()} src="/static/images/avatar/2.jpg" />
+                <Avatar alt={user.name && user.name.toUpperCase()} src="#" />
               </IconButton>
             </Tooltip>
             <Menu

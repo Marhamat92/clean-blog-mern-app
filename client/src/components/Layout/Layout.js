@@ -21,11 +21,18 @@ function Layout(
 
 
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        position: 'relative'
+      }}
+    >
       {user && <ApplicationBar />}
       {children}
       {user && <Footer />}
-    </>
+    </div>
   )
 }
 

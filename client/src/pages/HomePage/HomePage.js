@@ -12,6 +12,7 @@ import slideImage from '../../images/home-bg.jpg'
 import { useSelector } from 'react-redux'
 
 
+
 function HomePage() {
 
   const navigate = useNavigate()
@@ -19,6 +20,12 @@ function HomePage() {
   const { user } = useSelector(
     (state => state.auth)
   )
+
+  const { posts } = useSelector(
+    (state) => state.posts
+  )
+
+
 
   useEffect(() => {
     if (!user) {

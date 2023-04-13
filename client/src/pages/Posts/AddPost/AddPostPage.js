@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Slide from '../../../components/Slide/Slide'
 import { Stack, TextField, Button, Box } from '@mui/material'
-import { EditorState, convertToRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import axios from 'axios';
-import htmlToDraft from 'html-to-draftjs';
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { createPostSlice, reset } from '../../../features/posts/postsSlice'
 import CircularProgress from '@mui/material/CircularProgress';
+
+import './addPost.scss'
 
 
 
@@ -30,45 +27,51 @@ function AddPostPage() {
 
 
 
+
+
   const [post, setPost] = useState({
     post_title: '',
     post_subtitle: '',
-
+    post_content: '',
   })
 
-  const [editorState, setEditorState] = useState({
-    post_content: EditorState.createEmpty()
-  }
-  )
+
 
   const handlePostSubmit = (e) => {
     e.preventDefault()
-    //submit html and image to server
-    const html = convertToRaw(editorState.post_content.getCurrentContent())
+
+
+
+
     const postData = {
       post_title: post.post_title,
       post_subtitle: post.post_subtitle,
-      post_content: html,
+      post_content: post.post_content,
 
     }
 
     dispatch(createPostSlice(postData))
 
+    if (isSuccess) {
+      toast("Post Created Successfully!")
+    }
+
     setPost({
       post_title: '',
       post_subtitle: '',
+      post_content: '',
     })
-    setEditorState({
-      post_content: EditorState.createEmpty()
-    })
+
   }
+
+
 
 
 
 
 
   return (
-    <div>
+    <div className='addPost'>
       <Slide title="Add New Post" image="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cG9zdHxlbnwwfHwwfHw%3D&w=1000&q=80" />
       <Stack spacing={2} direction="column" sx={{ width: '100%', maxWidth: 500, margin: 'auto', marginTop: '20px', marginBottom: '20px', padding: '20px' }}
         component='form'
@@ -90,14 +93,14 @@ function AddPostPage() {
           value={post.post_subtitle}
           onChange={(e) => setPost({ ...post, post_subtitle: e.target.value })}
         />
-        <Editor
-          editorState={editorState.post_content}
-          toolbarClassName="toolbarClassName"
-          wrapperClassName="wrapperClassName"
-          editorClassName="editorClassName"
-          onEditorStateChange={
-            (editorState) => setEditorState({ ...editorState, post_content: editorState })
-          }
+        <TextField
+          id="outlined-basic"
+          label="Content"
+          variant="outlined"
+          value={post.post_content}
+          onChange={(e) => setPost({ ...post, post_content: e.target.value })}
+          rows="8"
+          multiline
         />
         <Button type='submit' color="secondary" variant="contained">Add Post</Button>
       </Stack>

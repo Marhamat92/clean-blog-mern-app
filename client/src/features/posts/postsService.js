@@ -27,10 +27,58 @@ const getPosts = async (token) => {
   return response.data
 }
 
+const getPost = async (postId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+  const response = await axios.get(API_URL + postId, config)
+
+  return response.data
+}
+
+
+
+const deletePost = async (postId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+  const response = await axios.delete(API_URL + postId, config)
+  return response.data
+}
+
+
+const updatePost = async (postId, post, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+  const response = await axios.put(API_URL + postId, post, config)
+  return response.data
+}
+
+
+
+
+
+
+
+
+
 const postsService = {
   createPost,
-  getPosts
+  getPosts,
+  deletePost,
+  getPost,
+  updatePost
 }
+
+
+
 
 
 
